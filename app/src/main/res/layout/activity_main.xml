@@ -8,6 +8,7 @@
     android:orientation="vertical"
     tools:context="com.jiaying.mediatable.activity.MainActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,14 +30,25 @@
             android:text="@string/app_name"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_midle" />
+
         <ImageView
             android:id="@+id/overflow_image"
             android:layout_width="50dp"
             android:layout_height="60dp"
-            android:src="@mipmap/overflow"/>
+            android:src="@mipmap/overflow" />
     </LinearLayout>
 
     <View style="@style/line_grey_style" />
+
+    <TextView
+        android:id="@+id/net_state_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/net_wrong_color"
+        android:padding="@dimen/btn_padding"
+        android:text="连接不可用，请检查网络和服务器配置"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_small" />
 
     <RadioGroup
         android:id="@+id/group"
@@ -143,68 +155,56 @@
                     android:text="等待献浆" />
 
                 <Button
+                    android:id="@+id/btn2"
                     style="@style/btn_style"
-                    android:text="等待献浆" />
+                    android:text="欢迎献浆" />
 
                 <Button
+                    android:id="@+id/btn3"
                     style="@style/btn_style"
-                    android:text="等待献浆" />
+                    android:text="加压提示" />
 
                 <Button
+                    android:id="@+id/btn4"
                     style="@style/btn_style"
-                    android:text="等待献浆" />
+                    android:text="穿刺提示" />
 
                 <Button
+                    android:id="@+id/btn5"
                     style="@style/btn_style"
-                    android:text="等待献浆" />
+                    android:text="穿刺视频播放" />
 
                 <Button
+                    android:id="@+id/btn6"
                     style="@style/btn_style"
-                    android:text="等待献浆" />
+                    android:text="穿刺评价" />
 
                 <Button
+                    android:id="@+id/btn7"
                     style="@style/btn_style"
-                    android:text="等待献浆" />
+                    android:text="采集提示页面" />
 
                 <Button
+                    android:id="@+id/btn8"
                     style="@style/btn_style"
-                    android:text="等待献浆" />
+                    android:text="采集播放播放视频" />
 
                 <Button
+                    android:id="@+id/btn9"
                     style="@style/btn_style"
-                    android:text="等待献浆" />
+                    android:text="握拳提示" />
 
                 <Button
+                    android:id="@+id/btn10"
                     style="@style/btn_style"
-                    android:text="等待献浆" />
+                    android:text="结束服务评价" />
 
                 <Button
+                    android:id="@+id/btn11"
                     style="@style/btn_style"
-                    android:text="等待献浆" />
+                    android:text="结束欢送" />
 
-                <Button
-                    style="@style/btn_style"
-                    android:text="等待献浆" />
 
-                <Button
-                    style="@style/btn_style"
-                    android:text="等待献浆" />
-
-                <Button
-                    style="@style/btn_style"
-                    android:text="等待献浆" />
-
-                <Button
-                    style="@style/btn_style"
-                    android:text="等待献浆" />
-
-                <Button
-                    style="@style/btn_style"
-                    android:text="等待献浆" />
-
-                <Button
-                    style="@style/btn_style"
-                    android:text="等待献浆" />
             </LinearLayout>
         </ScrollView>
 

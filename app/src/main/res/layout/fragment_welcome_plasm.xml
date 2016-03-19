@@ -1,0 +1,17 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/welcome_plams"
+    tools:context="com.jiaying.mediatable.fragment.WelcomePlasmFragment">
+
+    <TextView
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/btn_margin_much"
+        android:text="李白先生：欢迎您来献浆"
+        style="@style/txt_blue_big_style" />
+    <TextView
+        android:layout_marginTop="220dp"
+        android:text="您的献浆，是托起他人的生命希望"
+        style="@style/txt_orange_style" />
+</FrameLayout>

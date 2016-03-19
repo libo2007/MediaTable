@@ -5,10 +5,13 @@
     <string name="watch_film">观看影片</string>
     <string name="surf_internet">上网娱乐</string>
     <string name="advice">建议</string>
+    <string name="evalution">评价</string>
     <string name="appointment">预约</string>
     <string name="func_setting">功能配置</string>
     <string name="server_setting">服务器配置</string>
     <string name="restar">重启</string>
+    <string name="recharging">正在充电</string>
+    <string name="not_recharging">电源未连接，请连接电源</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

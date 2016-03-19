@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/video_playing"
+    tools:context="com.jiaying.mediatable.fragment.PlayVideoFragment">
+
+    <TextView
+        android:padding="@dimen/btn_margin"
+        android:layout_marginTop="@dimen/btn_margin_much"
+        android:textStyle="bold"
+        android:text="这里正在播放视频"
+        style="@style/txt_blue_big_style" />
+
+</FrameLayout>

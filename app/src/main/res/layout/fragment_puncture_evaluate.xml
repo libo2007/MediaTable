@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.jiaying.mediatable.fragment.PunctureEvaluateFragment">
+
+    <TextView
+        style="@style/txt_blue_big_style"
+        android:layout_marginTop="@dimen/btn_margin"
+        android:padding="@dimen/btn_margin"
+        android:text="请您对刚才护士的穿刺水平进行评价，我们会认真听取您的意见"
+        android:textStyle="bold" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <include layout="@layout/evaluation_item" />
+
+    </LinearLayout>
+
+    <Button
+        style="@style/btn_style"
+        android:text="提交" />
+</LinearLayout>

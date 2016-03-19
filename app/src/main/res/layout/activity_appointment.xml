@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/global_bg"
+    android:orientation="vertical"
+    tools:context="com.jiaying.mediatable.activity.AppointmentActivity">
+
+    <include layout="@layout/com_app_title" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/btn_inner_padding"
+        android:text="@string/appointment"
+        android:textColor="@color/txt_black"
+        android:textSize="@dimen/text_size_midle" />
+
+</LinearLayout>
