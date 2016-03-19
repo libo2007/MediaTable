@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/global_bg"
+    android:orientation="vertical"
+    tools:context="com.jiaying.mediatable.activity.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_color"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/main_color"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_midle" />
+        <ImageView
+            android:id="@+id/overflow_image"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/overflow"/>
+    </LinearLayout>
+
+    <View style="@style/line_grey_style" />
+
+    <RadioGroup
+        android:id="@+id/group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_bg"
+        android:orientation="horizontal"
+        android:padding="@dimen/line_width">
+
+        <RadioButton
+            android:id="@+id/btn_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:button="@null"
+            android:checked="false"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/watch_film"
+            android:textColor="@drawable/radio_btn_text"
+            android:textSize="@dimen/text_size_midle" />
+
+        <View
+            android:layout_width="@dimen/line_width"
+            android:layout_height="match_parent"
+            android:background="@color/main_color" />
+
+        <RadioButton
+            android:id="@+id/btn_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:button="@null"
+            android:checked="false"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/surf_internet"
+            android:textColor="@drawable/radio_btn_text"
+            android:textSize="@dimen/text_size_midle" />
+
+        <View
+            android:layout_width="@dimen/line_width"
+            android:layout_height="match_parent"
+            android:background="@color/main_color" />
+
+        <RadioButton
+            android:id="@+id/btn_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/advice"
+            android:textColor="@drawable/radio_btn_text"
+            android:textSize="@dimen/text_size_midle" />
+
+        <View
+            android:layout_width="@dimen/line_width"
+            android:layout_height="match_parent"
+            android:background="@color/main_color" />
+
+        <RadioButton
+            android:id="@+id/btn_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/appointment"
+            android:textColor="@drawable/radio_btn_text"
+            android:textSize="@dimen/text_size_midle" />
+
+    </RadioGroup>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn1"
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+
+                <Button
+                    style="@style/btn_style"
+                    android:text="等待献浆" />
+            </LinearLayout>
+        </ScrollView>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>
