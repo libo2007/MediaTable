@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/global_bg"
-    android:orientation="vertical"
     tools:context="com.jiaying.mediatable.activity.MainActivity">
 
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"> <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/main_color"
@@ -20,7 +22,13 @@
             android:layout_height="65dp"
             android:src="@mipmap/ic_launcher" />
 
+        <View
+            android:layout_margin="@dimen/btn_padding"
+            android:background="@color/white"
+            android:layout_width="@dimen/line_width"
+            android:layout_height="match_parent"/>
         <TextView
+            android:id="@+id/title_txt"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -38,183 +46,197 @@
             android:src="@mipmap/overflow" />
     </LinearLayout>
 
-    <View style="@style/line_grey_style" />
+        <View style="@style/line_grey_style" />
 
-    <TextView
-        android:id="@+id/net_state_txt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/net_wrong_color"
-        android:padding="@dimen/btn_padding"
-        android:text="连接不可用，请检查网络和服务器配置"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_small" />
-
-    <RadioGroup
-        android:id="@+id/group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edit_bg"
-        android:orientation="horizontal"
-        android:padding="@dimen/line_width">
-
-        <RadioButton
-            android:id="@+id/btn_1"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/net_state_txt"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:button="@null"
-            android:checked="false"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="@string/watch_film"
-            android:textColor="@drawable/radio_btn_text"
-            android:textSize="@dimen/text_size_midle" />
+            android:background="@color/net_wrong_color"
+            android:padding="@dimen/btn_padding"
+            android:text="连接不可用，请检查网络和服务器配置"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_small" />
 
-        <View
-            android:layout_width="@dimen/line_width"
-            android:layout_height="match_parent"
-            android:background="@color/main_color" />
-
-        <RadioButton
-            android:id="@+id/btn_2"
-            android:layout_width="0dp"
+        <RadioGroup
+            android:id="@+id/group"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:button="@null"
-            android:checked="false"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="@string/surf_internet"
-            android:textColor="@drawable/radio_btn_text"
-            android:textSize="@dimen/text_size_midle" />
+            android:background="@drawable/edit_bg"
+            android:orientation="horizontal"
+            android:padding="@dimen/line_width">
 
-        <View
-            android:layout_width="@dimen/line_width"
-            android:layout_height="match_parent"
-            android:background="@color/main_color" />
-
-        <RadioButton
-            android:id="@+id/btn_3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="@string/advice"
-            android:textColor="@drawable/radio_btn_text"
-            android:textSize="@dimen/text_size_midle" />
-
-        <View
-            android:layout_width="@dimen/line_width"
-            android:layout_height="match_parent"
-            android:background="@color/main_color" />
-
-        <RadioButton
-            android:id="@+id/btn_4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:button="@null"
-            android:checked="true"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="@string/appointment"
-            android:textColor="@drawable/radio_btn_text"
-            android:textSize="@dimen/text_size_midle" />
-
-    </RadioGroup>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <RadioButton
+                android:id="@+id/btn_1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:button="@null"
+                android:checked="false"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/watch_film"
+                android:textColor="@drawable/radio_btn_text"
+                android:textSize="@dimen/text_size_midle" />
 
-                <Button
-                    android:id="@+id/btn1"
-                    style="@style/btn_style"
-                    android:text="等待献浆" />
+            <View
+                android:layout_width="@dimen/line_width"
+                android:layout_height="match_parent"
+                android:background="@color/main_color" />
 
-                <Button
-                    android:id="@+id/btn2"
-                    style="@style/btn_style"
-                    android:text="欢迎献浆" />
+            <RadioButton
+                android:id="@+id/btn_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:button="@null"
+                android:checked="false"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/surf_internet"
+                android:textColor="@drawable/radio_btn_text"
+                android:textSize="@dimen/text_size_midle" />
 
-                <Button
-                    android:id="@+id/btn3"
-                    style="@style/btn_style"
-                    android:text="加压提示" />
+            <View
+                android:layout_width="@dimen/line_width"
+                android:layout_height="match_parent"
+                android:background="@color/main_color" />
 
-                <Button
-                    android:id="@+id/btn4"
-                    style="@style/btn_style"
-                    android:text="穿刺提示" />
+            <RadioButton
+                android:id="@+id/btn_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:button="@null"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/advice"
+                android:textColor="@drawable/radio_btn_text"
+                android:textSize="@dimen/text_size_midle" />
 
-                <Button
-                    android:id="@+id/btn5"
-                    style="@style/btn_style"
-                    android:text="穿刺视频播放" />
+            <View
+                android:layout_width="@dimen/line_width"
+                android:layout_height="match_parent"
+                android:background="@color/main_color" />
 
-                <Button
-                    android:id="@+id/btn6"
-                    style="@style/btn_style"
-                    android:text="穿刺评价" />
+            <RadioButton
+                android:id="@+id/btn_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/appointment"
+                android:textColor="@drawable/radio_btn_text"
+                android:textSize="@dimen/text_size_midle" />
 
-                <Button
-                    android:id="@+id/btn7"
-                    style="@style/btn_style"
-                    android:text="采集提示页面" />
-
-                <Button
-                    android:id="@+id/btn8"
-                    style="@style/btn_style"
-                    android:text="采集播放播放视频" />
-
-                <Button
-                    android:id="@+id/btn9"
-                    style="@style/btn_style"
-                    android:text="握拳提示" />
-
-                <Button
-                    android:id="@+id/btn10"
-                    style="@style/btn_style"
-                    android:text="结束服务评价" />
-
-                <Button
-                    android:id="@+id/btn11"
-                    style="@style/btn_style"
-                    android:text="结束欢送" />
+        </RadioGroup>
 
 
-            </LinearLayout>
-        </ScrollView>
-
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:orientation="horizontal">
 
-        </FrameLayout>
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <Button
+                        android:id="@+id/btn0"
+                        style="@style/btn_style"
+                        android:text="初始化界面" />
+                    <Button
+                        android:id="@+id/btn1"
+                        style="@style/btn_style"
+                        android:text="等待献浆" />
+                    <Button
+                        android:id="@+id/btn1_1"
+                        style="@style/btn_style"
+                        android:text="休眠阶段" />
+                    <Button
+                        android:id="@+id/btn2"
+                        style="@style/btn_style"
+                        android:text="欢迎献浆" />
+
+                    <Button
+                        android:id="@+id/btn3"
+                        style="@style/btn_style"
+                        android:text="加压提示" />
+
+                    <Button
+                        android:id="@+id/btn4"
+                        style="@style/btn_style"
+                        android:text="穿刺提示" />
+
+                    <Button
+                        android:id="@+id/btn5"
+                        style="@style/btn_style"
+                        android:text="穿刺视频播放" />
+
+                    <Button
+                        android:id="@+id/btn6"
+                        style="@style/btn_style"
+                        android:text="穿刺评价" />
+
+                    <Button
+                        android:id="@+id/btn7"
+                        style="@style/btn_style"
+                        android:text="采集提示页面" />
+
+                    <Button
+                        android:id="@+id/btn8"
+                        style="@style/btn_style"
+                        android:text="采集播放播放视频" />
+
+                    <Button
+                        android:id="@+id/btn9"
+                        style="@style/btn_style"
+                        android:text="握拳提示" />
+
+                    <Button
+                        android:id="@+id/btn10"
+                        style="@style/btn_style"
+                        android:text="结束服务评价" />
+
+                    <Button
+                        android:id="@+id/btn11"
+                        style="@style/btn_style"
+                        android:text="结束欢送" />
+
+
+                </LinearLayout>
+            </ScrollView>
+
+            <FrameLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/wait_bg"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="@color/wait_bg"
+        android:layout_height="match_parent"></LinearLayout>
+</RelativeLayout>

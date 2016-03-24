@@ -52,14 +52,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private View mParentView;
     private TextView fun_txt;//功能设置
     private TextView server_txt;//服务器设置
-
+    private View wait_bg;//待机背景
     private TextView net_state_txt;//网络链接状态
+    private TextView title_txt;//标题
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             //判断电量
             String action = intent.getAction();
-            if (Intent.ACTION_BATTERY_CHANGED.equals(action))
-            {
+            if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
                 int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
                 if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
 //                 正在充电
@@ -69,8 +69,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         ToastUtils.showToast(MainActivity.this, R.string.not_recharging);
                     }
                 }
-            }
-            else if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
+            } else if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
                 ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo mobNetInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
                 NetworkInfo wifiNetInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -152,6 +151,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         fun_txt.setOnClickListener(this);
         server_txt = (TextView) mPopView.findViewById(R.id.server_txt);
         server_txt.setOnClickListener(this);
+        wait_bg = findViewById(R.id.wait_bg);
+        title_txt = (TextView) findViewById(R.id.title_txt);
     }
 
     @Override
@@ -164,12 +165,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void Test() {
+        //初始化
+        Button btn0 = (Button) findViewById(R.id.btn0);
+        btn0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wait_bg.setVisibility(View.GONE);
+                title_txt.setText(R.string.app_name);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new InitializeFragment()).commit();
+            }
+        });
+        //休眠界面
+        Button btn1_1 = (Button) findViewById(R.id.btn1_1);
+        btn1_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wait_bg.setVisibility(View.VISIBLE);
+                title_txt.setText(R.string.app_name);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new WaitingPlasmFragment()).commit();
+            }
+        });
 
         //等待献浆元
         Button btn1 = (Button) findViewById(R.id.btn1);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wait_bg.setVisibility(View.GONE);
+                title_txt.setText(R.string.fragment_wait_plasm_title);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new WaitingPlasmFragment()).commit();
             }
         });
@@ -178,6 +201,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wait_bg.setVisibility(View.GONE);
+                title_txt.setText(R.string.fragment_welcome_plasm_title);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new WelcomePlasmFragment()).commit();
             }
         });
@@ -187,6 +212,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wait_bg.setVisibility(View.GONE);
+                title_txt.setText(R.string.fragment_pressing_title);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PressingFragment()).commit();
             }
         });
@@ -196,6 +223,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wait_bg.setVisibility(View.GONE);
+                title_txt.setText(R.string.fragment_puncture_title);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PunctureFragment()).commit();
             }
         });
@@ -205,6 +234,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wait_bg.setVisibility(View.GONE);
+                title_txt.setText(R.string.fragment_puncture_video);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayVideoFragment()).commit();
             }
         });
@@ -214,6 +245,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wait_bg.setVisibility(View.GONE);
+                title_txt.setText(R.string.fragment_puncture_evaluate);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PunctureEvaluateFragment()).commit();
             }
         });
@@ -223,6 +256,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wait_bg.setVisibility(View.GONE);
+                title_txt.setText(R.string.fragment_collect_title);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new CollectionFragment()).commit();
             }
         });
@@ -232,6 +267,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wait_bg.setVisibility(View.GONE);
+                title_txt.setText(R.string.play_video);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayVideoFragment()).commit();
             }
         });
@@ -240,6 +277,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wait_bg.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new FistFragment()).commit();
             }
         });
@@ -286,7 +324,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.net_state_txt:
                 //检测网络和检查服务器配置
-                it = new Intent(MainActivity.this,ServerSettingActivity.class);
+                it = new Intent(MainActivity.this, ServerSettingActivity.class);
                 break;
         }
         if (it != null) {

@@ -13,4 +13,5 @@
     <color name="global_bg">#ececec</color>
     <color name="colorGreen">#00cc33</color>
     <color name="net_wrong_color">#cc9933</color>
+    <color name="wait_bg">#90000000</color>
 </resources>

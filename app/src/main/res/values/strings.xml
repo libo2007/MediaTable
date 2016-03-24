@@ -12,6 +12,14 @@
     <string name="restar">重启</string>
     <string name="recharging">正在充电</string>
     <string name="not_recharging">电源未连接，请连接电源</string>
+    <string name="fragment_wait_plasm_title">等待献浆员</string>
+    <string name="fragment_welcome_plasm_title">欢迎您</string>
+    <string name="fragment_pressing_title">加压提示</string>
+    <string name="fragment_puncture_title">穿刺提示</string>
+    <string name="fragment_puncture_video">穿刺视频</string>
+    <string name="fragment_puncture_evaluate">穿刺评价</string>
+    <string name="fragment_collect_title">采集提示</string>
+    <string name="play_video">播放视频</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
