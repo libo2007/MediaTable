@@ -6,12 +6,36 @@
     tools:context="com.jiaying.mediatable.fragment.OverServiceEvaluateFragment">
 
     <TextView
-        android:textStyle="bold"
+        style="@style/txt_white_big_style"
         android:layout_marginTop="@dimen/btn_margin_much"
         android:text="李白先生：再次感谢您来献浆"
-        style="@style/txt_white_big_style" />
+        android:textStyle="bold" />
+
     <TextView
+        style="@style/txt_blue_style"
         android:layout_marginTop="220dp"
-        android:text="比海洋，天空更宽阔的是奉献之心"
-        style="@style/txt_blue_style" />
+        android:text="比海洋，天空更宽阔的是奉献之心" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ecode" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/btn_inner_padding"
+            android:background="@color/white"
+            android:padding="@dimen/btn_inner_padding"
+            android:text="扫描关注浆站公众号"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/text_size_small_more" />
+    </LinearLayout>
 </FrameLayout>

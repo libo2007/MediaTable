@@ -7,10 +7,11 @@
     tools:context="com.jiaying.mediatable.fragment.OverServiceEvaluateFragment">
 
     <TextView
+        android:id="@+id/content_txt"
         android:padding="@dimen/btn_margin"
         android:layout_marginTop="@dimen/btn_margin"
         android:textStyle="bold"
-        android:text="请您对刚才护士的献浆过程中进行评价，我们会认真听取您的意见"
+        android:text="@string/fragment_over_evaluate_conent"
         style="@style/txt_blue_big_style" />
 
     <LinearLayout

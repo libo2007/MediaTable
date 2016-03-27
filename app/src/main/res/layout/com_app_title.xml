@@ -12,11 +12,21 @@
         android:scaleType="center"
         android:src="@mipmap/jiantou_press" />
 
+    <View
+        android:id="@+id/line_view"
+        android:layout_marginRight="@dimen/btn_padding"
+        android:layout_marginTop="@dimen/btn_padding"
+        android:layout_marginBottom="@dimen/btn_padding"
+        android:layout_toRightOf="@id/back_img"
+        android:layout_width="@dimen/line_width"
+        android:layout_height="match_parent"
+        android:background="@color/white"/>
     <TextView
+        android:layout_toRightOf="@id/line_view"
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
         android:text="标题"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_midle" />

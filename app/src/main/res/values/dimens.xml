@@ -23,4 +23,6 @@
     <dimen name="server_setting_txt_min_width">240dp</dimen>
     <dimen name="server_setting_edit_min_width">350dp</dimen>
     <dimen name="video_item_size">120dp</dimen>
+    <dimen name="image_size">60dp</dimen>
+    <dimen name="plams_progress_width">30dp</dimen>
 </resources>

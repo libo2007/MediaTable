@@ -6,10 +6,11 @@
     tools:context="com.jiaying.mediatable.fragment.CollectionFragment">
 
     <TextView
+        android:id="@+id/content_txt"
         android:padding="@dimen/btn_margin"
         android:layout_marginTop="@dimen/btn_margin_much"
         android:textStyle="bold"
-        android:text="开始进入采集，采集过程中您有任何需要请点击电话护士会及时为您服务"
+        android:text="@string/fragment_collect_content"
         style="@style/txt_blue_big_style" />
 
 </FrameLayout>

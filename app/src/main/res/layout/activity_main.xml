@@ -11,40 +11,95 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"> <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/main_color"
-        android:gravity="center_vertical">
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:src="@mipmap/ic_launcher" />
-
-        <View
-            android:layout_margin="@dimen/btn_padding"
-            android:background="@color/white"
-            android:layout_width="@dimen/line_width"
-            android:layout_height="match_parent"/>
-        <TextView
-            android:id="@+id/title_txt"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/main_color"
-            android:gravity="center_vertical"
-            android:paddingLeft="5dp"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_midle" />
+            android:gravity="center_vertical">
 
-        <ImageView
-            android:id="@+id/overflow_image"
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/overflow" />
-    </LinearLayout>
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <View
+                android:layout_width="@dimen/line_width"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/btn_padding"
+                android:background="@color/white" />
+
+            <TextView
+                android:id="@+id/title_txt"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/main_color"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_midle" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/image_size"
+                    android:layout_height="@dimen/image_size"
+                    android:layout_gravity="center"
+                    android:scaleType="center"
+                    android:src="@mipmap/wifi" />
+
+                <TextView
+                    android:id="@+id/wifi_not_txt"
+                    style="@style/txt_black_style"
+                    android:layout_gravity="center"
+                    android:text="×" />
+            </FrameLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/txt_grey" />
+
+                <LinearLayout
+                    android:layout_width="18dp"
+                    android:layout_height="26dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_grey_bg"
+                    android:orientation="vertical">
+
+                    <com.jiaying.mediatable.widget.VerticalProgressBar
+                      android:id="@+id/battery_pb"
+                        style="@style/progress_v_batery"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:max="100"
+                        android:padding="@dimen/line_width"
+                        android:progress="20" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/overflow_image"
+                android:layout_width="46dp"
+                android:layout_height="@dimen/image_size"
+                android:layout_gravity="center_vertical"
+                android:scaleType="center"
+                android:src="@mipmap/overflow" />
+        </LinearLayout>
 
         <View style="@style/line_grey_style" />
 
@@ -64,7 +119,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edit_bg"
             android:orientation="horizontal"
-            android:padding="@dimen/line_width">
+            android:padding="@dimen/line_width"
+            android:visibility="gone">
 
             <RadioButton
                 android:id="@+id/btn_1"
@@ -156,18 +212,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <Button
                         android:id="@+id/btn0"
                         style="@style/btn_style"
                         android:text="初始化界面" />
+
                     <Button
                         android:id="@+id/btn1"
                         style="@style/btn_style"
                         android:text="等待献浆" />
+
                     <Button
                         android:id="@+id/btn1_1"
                         style="@style/btn_style"
                         android:text="休眠阶段" />
+
                     <Button
                         android:id="@+id/btn2"
                         style="@style/btn_style"
@@ -229,14 +289,143 @@
                 android:layout_weight="1">
 
             </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/right_view"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/btn_inner_padding"
+                    android:src="@mipmap/ecode" />
+
+                <View style="@style/line_blue_5_style" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/time_txt"
+                        style="@style/txt_black_small_style"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="12:23" />
+
+                    <TextView
+                        style="@style/txt_blue_small"
+                        android:layout_marginBottom="@dimen/btn_inner_padding"
+                        android:text="时间" />
+                </LinearLayout>
+
+                <View style="@style/line_blue_5_style" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.5"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/btn_inner_padding"
+                        android:layout_weight="1"
+                        android:background="@drawable/edit_bg"
+                        android:orientation="vertical">
+
+                        <com.jiaying.mediatable.widget.VerticalProgressBar
+                            android:id="@+id/collect_pb"
+                            style="@style/progress_v_plams"
+                            android:layout_height="match_parent"
+                            android:layout_width="@dimen/plams_progress_width"
+                            android:max="100"
+                            android:padding="@dimen/line_width"
+                            android:progress="20" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        style="@style/txt_blue_small"
+                        android:layout_marginBottom="@dimen/btn_inner_padding"
+                        android:text="采集进度" />
+                </LinearLayout>
+
+                <View style="@style/line_blue_5_style" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/txt_black_small_style"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center" />
+
+                    <TextView
+                        style="@style/txt_blue_small"
+                        android:layout_marginBottom="@dimen/btn_inner_padding"
+                        android:text="座椅调节" />
+                </LinearLayout>
+
+                <View style="@style/line_blue_5_style" />
+
+                <LinearLayout
+                    android:id="@+id/call_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scaleType="center"
+                        android:src="@mipmap/call" />
+
+                    <TextView
+                        style="@style/txt_blue_small"
+                        android:layout_marginBottom="@dimen/btn_inner_padding"
+                        android:text="呼叫护士" />
+                </LinearLayout>
+
+                <View style="@style/line_blue_5_style" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/wait_bg"
-        android:orientation="vertical"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/wait_bg"
-        android:layout_height="match_parent"></LinearLayout>
+        android:orientation="vertical"
+        android:visibility="gone"></LinearLayout>
+
+    <TextView
+        android:id="@+id/battery_not_connect_txt"
+        android:layout_width="260dp"
+        android:layout_height="160dp"
+        android:layout_centerInParent="true"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/btn_padding"
+        android:text="@string/not_recharging"
+        android:textColor="@color/main_color"
+        android:textSize="@dimen/text_size_midle"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -6,10 +6,11 @@
     tools:context="com.jiaying.mediatable.fragment.PunctureFragment">
 
     <TextView
+        android:id="@+id/content_txt"
         android:padding="@dimen/btn_margin"
         android:layout_marginTop="@dimen/btn_margin_much"
         android:textStyle="bold"
-        android:text="即将开始穿刺，请放松，如有任何不适，请告知护士"
+        android:text="@string/fragment_puncture_content"
         style="@style/txt_blue_big_style" />
 
 </FrameLayout>

@@ -1,6 +1,8 @@
 package com.jiaying.mediatable.activity;
 
+import android.app.Dialog;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +12,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +42,11 @@ import com.jiaying.mediatable.fragment.WaitingPlasmFragment;
 import com.jiaying.mediatable.fragment.WelcomePlasmFragment;
 import com.jiaying.mediatable.utils.AppInfoUtils;
 import com.jiaying.mediatable.utils.ToastUtils;
+import com.jiaying.mediatable.widget.VerticalProgressBar;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -54,20 +64,36 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private TextView server_txt;//服务器设置
     private View wait_bg;//待机背景
     private TextView net_state_txt;//网络链接状态
+    private TextView wifi_not_txt;
     private TextView title_txt;//标题
+    private VerticalProgressBar battery_pb;//剩余电量
+    private View right_view;//采浆过程状态显示
+    private View call_view;//呼叫
+    private TextView battery_not_connect_txt;//电源未连接提示
+    private ProgressDialog mDialog = null;
+    private TextView time_txt;//当前时间
+    private VerticalProgressBar collect_pb;//采集进度
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             //判断电量
             String action = intent.getAction();
             if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
+                int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                //获取最大电量，如未获取到具体数值，则默认为100
+                int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+                //显示电量
+                battery_pb.setMax(batteryScale);
+                battery_pb.setProgress(batteryLevel);
+
                 int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
                 if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
 //                 正在充电
-                    ToastUtils.showToast(MainActivity.this, R.string.recharging);
+                    battery_not_connect_txt.setVisibility(View.GONE);
                 } else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
                     {
-                        ToastUtils.showToast(MainActivity.this, R.string.not_recharging);
+                        battery_not_connect_txt.setVisibility(View.VISIBLE);
                     }
+
                 }
             } else if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
                 ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -75,9 +101,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 NetworkInfo wifiNetInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
                 if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
                     net_state_txt.setVisibility(View.VISIBLE);
+                    wifi_not_txt.setVisibility(View.VISIBLE);
                 } else {
                     net_state_txt.setVisibility(View.GONE);
+                    wifi_not_txt.setVisibility(View.GONE);
                 }
+            }
+        }
+    };
+
+    private static final int WHAT_UPDATE_TIME = 1;
+    private   Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case WHAT_UPDATE_TIME:
+                    long sysTime = System.currentTimeMillis();
+                    CharSequence sysTimeStr = DateFormat.format("HH:mm:ss", sysTime);
+                    time_txt.setText(sysTimeStr); //更新时间
+                    break;
             }
         }
     };
@@ -89,6 +132,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         registerReceiver(receiver, filter);
+        new Thread(new TimeRunnable()).start();
     }
 
     @Override
@@ -102,13 +146,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void initView() {
         setContentView(R.layout.activity_main);
-        fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, new InitializeFragment()).commit();
         initTitleBar();
         initGroup();
+        initMain();
         Test();
     }
 
+    //中间部分的ui初始化
+    private void initMain() {
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new InitializeFragment()).commit();
+        battery_not_connect_txt = (TextView) findViewById(R.id.battery_not_connect_txt);
+
+        time_txt = (TextView) findViewById(R.id.time_txt);
+        collect_pb = (VerticalProgressBar) findViewById(R.id.collect_pb);
+        collect_pb.setProgress(80);
+    }
+
+    //初始化tab选择
     private void initGroup() {
         mGroup = (RadioGroup) findViewById(R.id.group);
         mGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -138,10 +193,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
+    //标题栏初始化
     private void initTitleBar() {
         mParentView = getLayoutInflater().inflate(R.layout.activity_main,
                 null);
         mPopView = getLayoutInflater().inflate(R.layout.popupwin_main, null);
+        right_view = findViewById(R.id.right_view);
+        call_view = findViewById(R.id.call_view);
+        call_view.setOnClickListener(this);
+        battery_pb = (VerticalProgressBar) findViewById(R.id.battery_pb);
+        wifi_not_txt = (TextView) findViewById(R.id.wifi_not_txt);
         net_state_txt = (TextView) findViewById(R.id.net_state_txt);
         net_state_txt.setOnClickListener(this);
         //选择功能设置，服务器地址设置以及重启
@@ -170,8 +231,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.app_name);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new InitializeFragment()).commit();
             }
         });
@@ -180,8 +243,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn1_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
                 wait_bg.setVisibility(View.VISIBLE);
                 title_txt.setText(R.string.app_name);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new WaitingPlasmFragment()).commit();
             }
         });
@@ -191,8 +256,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_wait_plasm_title);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new WaitingPlasmFragment()).commit();
             }
         });
@@ -201,8 +268,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_welcome_plasm_title);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new WelcomePlasmFragment()).commit();
             }
         });
@@ -212,8 +281,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_pressing_title);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PressingFragment()).commit();
             }
         });
@@ -223,8 +294,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_puncture_title);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PunctureFragment()).commit();
             }
         });
@@ -234,8 +307,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_puncture_video);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayVideoFragment()).commit();
             }
         });
@@ -245,8 +320,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_puncture_evaluate);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PunctureEvaluateFragment()).commit();
             }
         });
@@ -256,8 +333,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_collect_title);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new CollectionFragment()).commit();
             }
         });
@@ -267,8 +346,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.VISIBLE);
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.play_video);
+                mGroup.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayVideoFragment()).commit();
             }
         });
@@ -277,7 +358,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 wait_bg.setVisibility(View.GONE);
+                mGroup.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new FistFragment()).commit();
             }
         });
@@ -287,6 +370,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new OverServiceEvaluateFragment()).commit();
             }
         });
@@ -296,6 +381,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                right_view.setVisibility(View.GONE);
+                mGroup.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new OverFragment()).commit();
             }
         });
@@ -326,6 +413,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //检测网络和检查服务器配置
                 it = new Intent(MainActivity.this, ServerSettingActivity.class);
                 break;
+            case R.id.call_view:
+                //呼叫护士提供服务
+                showCallDialog();
+                break;
         }
         if (it != null) {
             startActivity(it);
@@ -355,5 +446,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mPopupWindow.showAtLocation(mParentView, Gravity.RIGHT
                         | Gravity.TOP, AppInfoUtils.dip2px(MainActivity.this, 2),
                 AppInfoUtils.dip2px(MainActivity.this, 76));
+    }
+
+    private void showCallDialog() {
+        if (mDialog == null) {
+            mDialog = new ProgressDialog(this);
+        }
+        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mDialog.setCancelable(true);
+        mDialog.setCanceledOnTouchOutside(true);
+        mDialog.show();
+        mDialog.setContentView(R.layout.dlg_call_service);
+    }
+
+    private class TimeRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    Message message = new Message();
+                    message.what = WHAT_UPDATE_TIME;
+                    mHandler.sendMessage(message);
+                    Thread.sleep(1000);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

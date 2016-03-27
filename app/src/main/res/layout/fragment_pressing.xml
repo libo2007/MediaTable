@@ -6,10 +6,11 @@
     tools:context="com.jiaying.mediatable.fragment.PressingFragment">
 
     <TextView
+        android:id="@+id/content_txt"
         android:padding="@dimen/btn_margin"
         android:layout_marginTop="@dimen/btn_margin_much"
         android:textStyle="bold"
-        android:text="现在开始加压，如果有任何不适请告知护士"
+        android:text="@string/fragment_pressing_conent"
         style="@style/txt_blue_big_style" />
 
 </FrameLayout>
