@@ -29,6 +29,7 @@ import com.jiaying.mediatable.fragment.AdviceFragment;
 import com.jiaying.mediatable.fragment.AppointmentFragment;
 import com.jiaying.mediatable.fragment.CollectionFragment;
 import com.jiaying.mediatable.fragment.FistFragment;
+import com.jiaying.mediatable.fragment.FunctionSettingFragment;
 import com.jiaying.mediatable.fragment.InitializeFragment;
 import com.jiaying.mediatable.fragment.OverFragment;
 import com.jiaying.mediatable.fragment.OverServiceEvaluateFragment;
@@ -36,6 +37,7 @@ import com.jiaying.mediatable.fragment.PlayVideoFragment;
 import com.jiaying.mediatable.fragment.PressingFragment;
 import com.jiaying.mediatable.fragment.PunctureEvaluateFragment;
 import com.jiaying.mediatable.fragment.PunctureFragment;
+import com.jiaying.mediatable.fragment.ServerSettingFragment;
 import com.jiaying.mediatable.fragment.SurfInternetFragment;
 import com.jiaying.mediatable.fragment.VideoFragment;
 import com.jiaying.mediatable.fragment.WaitingPlasmFragment;
@@ -55,6 +57,10 @@ import java.util.Date;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager fragmentManager;
 
+    private View title_bar_view;//标题栏1
+    private View title_bar_back_view;//带返回的标题栏
+    private ImageView title_bar_back_img;//返回按钮
+    private TextView title_bar_back_txt;//带返回标题栏的标题
     private RadioGroup mGroup;
     private ImageView overflow_image;//弹出功能
     private PopupWindow mPopupWindow;
@@ -155,7 +161,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     //中间部分的ui初始化
     private void initMain() {
         fragmentManager = getFragmentManager();
+
         fragmentManager.beginTransaction().replace(R.id.fragment_container, new InitializeFragment()).commit();
+        title_bar_view = findViewById(R.id.title_bar_view);
+        title_bar_back_view = findViewById(R.id.title_bar_back_view);
+        title_bar_back_img = (ImageView) findViewById(R.id.back_img);
+        title_bar_back_img.setOnClickListener(this);
+        title_bar_back_txt = (TextView) findViewById(R.id.title_text);
         battery_not_connect_txt = (TextView) findViewById(R.id.battery_not_connect_txt);
 
         time_txt = (TextView) findViewById(R.id.time_txt);
@@ -394,12 +406,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.fun_txt:
                 //功能设置
-                it = new Intent(MainActivity.this, FunctionSettingActivity.class);
+//                it = new Intent(MainActivity.this, FunctionSettingActivity.class);
+                title_bar_view.setVisibility(View.GONE);
+                title_bar_back_view.setVisibility(View.VISIBLE);
+                title_bar_back_txt.setText(R.string.func_setting);
+                right_view.setVisibility(View.GONE);
+                mGroup.setVisibility(View.GONE);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new FunctionSettingFragment()).addToBackStack(null).commit();
                 mPopupWindow.dismiss();
                 break;
             case R.id.server_txt:
                 //服务器设置
-                it = new Intent(MainActivity.this, ServerSettingActivity.class);
+//                it = new Intent(MainActivity.this, ServerSettingActivity.class);
+                title_bar_view.setVisibility(View.GONE);
+                title_bar_back_view.setVisibility(View.VISIBLE);
+                title_bar_back_txt.setText(R.string.server_setting);
+                right_view.setVisibility(View.GONE);
+                mGroup.setVisibility(View.GONE);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new ServerSettingFragment()).addToBackStack(null).commit();
                 mPopupWindow.dismiss();
                 break;
             case R.id.restar_txt:
@@ -417,11 +441,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //呼叫护士提供服务
                 showCallDialog();
                 break;
+            case R.id.back_img:
+                //返回
+                title_bar_back_view.setVisibility(View.GONE);
+                title_bar_view.setVisibility(View.VISIBLE);
+                fragmentManager.popBackStack();
+                break;
         }
         if (it != null) {
             startActivity(it);
         }
     }
+
+
 
     private void showPopWindow() {
         if (mPopupWindow == null) {

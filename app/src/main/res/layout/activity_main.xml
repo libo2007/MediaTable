@@ -13,7 +13,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include layout="@layout/com_app_title" />
+
         <LinearLayout
+            android:id="@+id/title_bar_view"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/main_color"
@@ -81,10 +85,10 @@
                     android:orientation="vertical">
 
                     <com.jiaying.mediatable.widget.VerticalProgressBar
-                      android:id="@+id/battery_pb"
+                        android:id="@+id/battery_pb"
                         style="@style/progress_v_batery"
-                        android:layout_height="match_parent"
                         android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:max="100"
                         android:padding="@dimen/line_width"
                         android:progress="20" />
@@ -345,8 +349,8 @@
                         <com.jiaying.mediatable.widget.VerticalProgressBar
                             android:id="@+id/collect_pb"
                             style="@style/progress_v_plams"
-                            android:layout_height="match_parent"
                             android:layout_width="@dimen/plams_progress_width"
+                            android:layout_height="match_parent"
                             android:max="100"
                             android:padding="@dimen/line_width"
                             android:progress="20" />
