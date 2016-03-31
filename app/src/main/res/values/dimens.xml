@@ -25,4 +25,5 @@
     <dimen name="video_item_size">120dp</dimen>
     <dimen name="image_size">60dp</dimen>
     <dimen name="plams_progress_width">30dp</dimen>
+    <dimen name="btn_width_360">360dp</dimen>
 </resources>

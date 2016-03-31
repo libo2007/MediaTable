@@ -28,6 +28,7 @@ import com.jiaying.mediatable.R;
 import com.jiaying.mediatable.fragment.AdviceFragment;
 import com.jiaying.mediatable.fragment.AppointmentFragment;
 import com.jiaying.mediatable.fragment.CollectionFragment;
+import com.jiaying.mediatable.fragment.EvaluationFragment;
 import com.jiaying.mediatable.fragment.FistFragment;
 import com.jiaying.mediatable.fragment.FunctionSettingFragment;
 import com.jiaying.mediatable.fragment.InitializeFragment;
@@ -42,6 +43,7 @@ import com.jiaying.mediatable.fragment.SurfInternetFragment;
 import com.jiaying.mediatable.fragment.VideoFragment;
 import com.jiaying.mediatable.fragment.WaitingPlasmFragment;
 import com.jiaying.mediatable.fragment.WelcomePlasmFragment;
+import com.jiaying.mediatable.thread.ObservableZXDCSignalListenerThread;
 import com.jiaying.mediatable.utils.AppInfoUtils;
 import com.jiaying.mediatable.utils.ToastUtils;
 import com.jiaying.mediatable.widget.VerticalProgressBar;
@@ -79,6 +81,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ProgressDialog mDialog = null;
     private TextView time_txt;//当前时间
     private VerticalProgressBar collect_pb;//采集进度
+
+    private Button appointment_btn;//预约按钮
+    private View advice_view;//建议和评论view
+    private Button advice_btn;//建议
+    private Button evaluate_btn;//评价
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             //判断电量
@@ -117,7 +124,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     };
 
     private static final int WHAT_UPDATE_TIME = 1;
-    private   Handler mHandler = new Handler() {
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -138,6 +145,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         registerReceiver(receiver, filter);
+//        connectServer();
         new Thread(new TimeRunnable()).start();
     }
 
@@ -147,6 +155,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (receiver != null) {
             unregisterReceiver(receiver);
         }
+    }
+
+    //链接到服务器
+    private void connectServer() {
+        ObservableZXDCSignalListenerThread observableZXDCSignalListenerThread = new ObservableZXDCSignalListenerThread();
+        observableZXDCSignalListenerThread.start();
     }
 
     @Override
@@ -163,6 +177,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         fragmentManager = getFragmentManager();
 
         fragmentManager.beginTransaction().replace(R.id.fragment_container, new InitializeFragment()).commit();
+        appointment_btn = (Button) findViewById(R.id.appointment_btn);
+        appointment_btn.setOnClickListener(this);
+        advice_view = findViewById(R.id.advice_view);
+        advice_btn = (Button) findViewById(R.id.advice_btn);
+        advice_btn.setOnClickListener(this);
+        evaluate_btn = (Button) findViewById(R.id.evaluate_btn);
+        evaluate_btn.setOnClickListener(this);
         title_bar_view = findViewById(R.id.title_bar_view);
         title_bar_back_view = findViewById(R.id.title_bar_back_view);
         title_bar_back_img = (ImageView) findViewById(R.id.back_img);
@@ -184,19 +205,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 switch (checkedId) {
                     case R.id.btn_1:
                         //视频列表
+                        appointment_btn.setVisibility(View.GONE);
+                        advice_view.setVisibility(View.GONE);
                         fragmentManager.beginTransaction().replace(R.id.fragment_container, new VideoFragment()).commit();
                         break;
                     case R.id.btn_2:
                         //上网
+                        appointment_btn.setVisibility(View.GONE);
+                        advice_view.setVisibility(View.GONE);
                         fragmentManager.beginTransaction().replace(R.id.fragment_container, new SurfInternetFragment()).commit();
                         break;
                     case R.id.btn_3:
                         //意见
-                        fragmentManager.beginTransaction().replace(R.id.fragment_container, new AdviceFragment()).commit();
+                        appointment_btn.setVisibility(View.GONE);
+                        advice_view.setVisibility(View.VISIBLE);
+//                        fragmentManager.beginTransaction().replace(R.id.fragment_container, new AdviceFragment()).commit();
                         break;
                     case R.id.btn_4:
                         //预约
-                        fragmentManager.beginTransaction().replace(R.id.fragment_container, new AppointmentFragment()).commit();
+                        advice_view.setVisibility(View.GONE);
+                        appointment_btn.setVisibility(View.VISIBLE);
                         break;
 
                 }
@@ -247,6 +275,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.app_name);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new InitializeFragment()).commit();
             }
         });
@@ -259,6 +289,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.VISIBLE);
                 title_txt.setText(R.string.app_name);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new WaitingPlasmFragment()).commit();
             }
         });
@@ -272,6 +304,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_wait_plasm_title);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new WaitingPlasmFragment()).commit();
             }
         });
@@ -284,6 +318,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_welcome_plasm_title);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new WelcomePlasmFragment()).commit();
             }
         });
@@ -297,6 +333,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_pressing_title);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PressingFragment()).commit();
             }
         });
@@ -310,6 +348,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_puncture_title);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PunctureFragment()).commit();
             }
         });
@@ -323,6 +363,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_puncture_video);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayVideoFragment()).commit();
             }
         });
@@ -336,6 +378,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_puncture_evaluate);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PunctureEvaluateFragment()).commit();
             }
         });
@@ -349,6 +393,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_collect_title);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new CollectionFragment()).commit();
             }
         });
@@ -362,6 +408,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.play_video);
                 mGroup.setVisibility(View.VISIBLE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayVideoFragment()).commit();
             }
         });
@@ -373,6 +420,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 wait_bg.setVisibility(View.GONE);
                 mGroup.setVisibility(View.VISIBLE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new FistFragment()).commit();
             }
         });
@@ -384,6 +433,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public void onClick(View v) {
                 right_view.setVisibility(View.GONE);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new OverServiceEvaluateFragment()).commit();
             }
         });
@@ -395,6 +446,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public void onClick(View v) {
                 right_view.setVisibility(View.GONE);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new OverFragment()).commit();
             }
         });
@@ -412,6 +465,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 title_bar_back_txt.setText(R.string.func_setting);
                 right_view.setVisibility(View.GONE);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new FunctionSettingFragment()).addToBackStack(null).commit();
                 mPopupWindow.dismiss();
                 break;
@@ -423,6 +478,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 title_bar_back_txt.setText(R.string.server_setting);
                 right_view.setVisibility(View.GONE);
                 mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new ServerSettingFragment()).addToBackStack(null).commit();
                 mPopupWindow.dismiss();
                 break;
@@ -435,7 +492,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.net_state_txt:
                 //检测网络和检查服务器配置
-                it = new Intent(MainActivity.this, ServerSettingActivity.class);
+//                it = new Intent(MainActivity.this, ServerSettingActivity.class);
                 break;
             case R.id.call_view:
                 //呼叫护士提供服务
@@ -447,12 +504,44 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 title_bar_view.setVisibility(View.VISIBLE);
                 fragmentManager.popBackStack();
                 break;
+            case R.id.appointment_btn:
+                //预约
+                title_bar_view.setVisibility(View.GONE);
+                title_bar_back_view.setVisibility(View.VISIBLE);
+                title_bar_back_txt.setText(R.string.appointment);
+                right_view.setVisibility(View.VISIBLE);
+                mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new AppointmentFragment()).addToBackStack(null).commit();
+                break;
+            case R.id.advice_btn:
+                //意见
+                title_bar_view.setVisibility(View.GONE);
+                title_bar_back_view.setVisibility(View.VISIBLE);
+                title_bar_back_txt.setText(R.string.advice);
+                right_view.setVisibility(View.VISIBLE);
+                mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new AdviceFragment()).addToBackStack(null).commit();
+                break;
+            case R.id.evaluate_btn:
+                //评价
+                title_bar_view.setVisibility(View.GONE);
+                title_bar_back_view.setVisibility(View.VISIBLE);
+                title_bar_back_txt.setText(R.string.evalution);
+                right_view.setVisibility(View.VISIBLE);
+                mGroup.setVisibility(View.GONE);
+                appointment_btn.setVisibility(View.GONE);
+                advice_view.setVisibility(View.GONE);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new EvaluationFragment()).addToBackStack(null).commit();
+                break;
         }
         if (it != null) {
             startActivity(it);
         }
     }
-
 
 
     private void showPopWindow() {

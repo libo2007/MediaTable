@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import com.jiaying.mediatable.R;
 
 /*
-投诉与建议
+评价
  */
-public class AdviceFragment extends Fragment implements View.OnClickListener {
+public class EvaluationFragment extends Fragment implements View.OnClickListener {
 
     @Nullable
     @Override
