@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/global_bg"
     android:orientation="vertical"
-    tools:context="com.jiaying.mediatable.activity.AppointmentActivity">
+    tools:context="com.jiaying.mediatablet.activity.AppointmentActivity">
 
     <include layout="@layout/com_app_title" />
 
@@ -52,7 +52,7 @@
         </RelativeLayout>
 
 
-        <com.jiaying.mediatable.widget.CalendarView
+        <com.jiaying.mediatablet.widget.CalendarView
             android:id="@+id/calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

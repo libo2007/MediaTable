@@ -1,4 +1,4 @@
-package com.jiaying.mediatable;
+package com.jiaying.mediatablet;
 
 import org.junit.Test;
 

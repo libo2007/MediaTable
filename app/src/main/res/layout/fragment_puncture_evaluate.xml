@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="com.jiaying.mediatable.fragment.PunctureEvaluateFragment">
+    tools:context="com.jiaying.mediatablet.fragment.PunctureEvaluateFragment">
 
     <TextView
         android:id="@+id/content_txt"
