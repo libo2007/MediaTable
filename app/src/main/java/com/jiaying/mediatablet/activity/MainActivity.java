@@ -13,7 +13,10 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.format.DateFormat;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +50,6 @@ import com.jiaying.mediatablet.fragment.PressingFragment;
 import com.jiaying.mediatablet.fragment.PunctureEvaluateFragment;
 import com.jiaying.mediatablet.fragment.PunctureFragment;
 import com.jiaying.mediatablet.fragment.ServerSettingFragment;
-import com.jiaying.mediatablet.fragment.SurfInternetFragment;
-import com.jiaying.mediatablet.fragment.VideoFragment;
 import com.jiaying.mediatablet.fragment.WaitingPlasmFragment;
 import com.jiaying.mediatablet.fragment.WelcomePlasmFragment;
 import com.jiaying.mediatablet.utils.AppInfoUtils;
@@ -86,7 +87,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private View right_view;//采浆过程状态显示
     private View call_view;//呼叫
     private TextView battery_not_connect_txt;//电源未连接提示
-    private ProgressDialog mDialog = null;
+    private ProgressDialog mServiceDialog = null;//服务呼叫对话框
+    private ProgressDialog mEvalutionDialog = null;//评价对话框
     private TextView time_txt;//当前时间
     private VerticalProgressBar collect_pb;//采集进度
     private View collection_container;//采浆页面所有的父空间
@@ -409,6 +411,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.app_name);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new InitializeFragment()).commit();
@@ -423,6 +427,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.VISIBLE);
                 title_txt.setText(R.string.app_name);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new WaitingPlasmFragment()).commit();
@@ -439,6 +445,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_wait_plasm_title);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 WaitingPlasmFragment waitingPlasmFragment = WaitingPlasmFragment.newInstance(getString(R.string.general_welcome), "");
@@ -455,6 +463,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_welcome_plasm_title);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 WelcomePlasmFragment welcomeFragment = WelcomePlasmFragment.newInstance(MainActivity.this.getString(R.string.sloganoneabove), "李白" + ", " + MainActivity.this.getString(R.string.sloganonebelow));
@@ -473,6 +483,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_pressing_title);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PressingFragment()).commit();
@@ -489,6 +501,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_puncture_title);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PunctureFragment()).commit();
@@ -505,6 +519,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_puncture_video);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayVideoFragment()).commit();
@@ -520,8 +536,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_puncture_evaluate);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
+
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PunctureEvaluateFragment()).commit();
             }
         });
@@ -536,6 +555,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 wait_bg.setVisibility(View.GONE);
                 title_txt.setText(R.string.fragment_collect_title);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new CollectionFragment()).commit();
@@ -553,8 +574,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 title_bar_back_txt.setText(R.string.play_video);
                 right_view.setVisibility(View.VISIBLE);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
+                showEvalutionDialog();
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayVideoFragment()).commit();
             }
         });
@@ -567,6 +591,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startFist.startAni();
                 wait_bg.setVisibility(View.GONE);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.VISIBLE);
+                ivStopFistHint.setVisibility(View.VISIBLE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new FistFragment()).commit();
@@ -581,6 +607,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 status = Status.STATUS_OVER;
                 right_view.setVisibility(View.GONE);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new OverServiceEvaluateFragment()).commit();
@@ -595,6 +623,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 status = Status.STATUS_OVER;
                 right_view.setVisibility(View.GONE);
                 mGroup.setVisibility(View.GONE);
+                ivStartFistHint.setVisibility(View.GONE);
+                ivStopFistHint.setVisibility(View.GONE);
                 collection_container.setVisibility(View.GONE);
                 fragment_container.setVisibility(View.VISIBLE);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, new OverFragment()).commit();
@@ -723,17 +753,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 AppInfoUtils.dip2px(MainActivity.this, 76));
     }
 
+    //呼叫护士
     private void showCallDialog() {
-        if (mDialog == null) {
-            mDialog = new ProgressDialog(this);
+        if (mServiceDialog == null) {
+            mServiceDialog = new ProgressDialog(this);
         }
-        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mDialog.setCancelable(true);
-        mDialog.setCanceledOnTouchOutside(true);
-        mDialog.show();
-        mDialog.setContentView(R.layout.dlg_call_service);
+        mServiceDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mServiceDialog.setCancelable(true);
+        mServiceDialog.setCanceledOnTouchOutside(true);
+        mServiceDialog.show();
+        mServiceDialog.setContentView(R.layout.dlg_call_service);
     }
-
+    //穿刺评价对话框
+    private void showEvalutionDialog() {
+        if (mEvalutionDialog == null) {
+            mEvalutionDialog = new ProgressDialog(this);
+        }
+        mEvalutionDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mEvalutionDialog.setCancelable(true);
+        mEvalutionDialog.setCanceledOnTouchOutside(true);
+        mEvalutionDialog.show();
+        View view = getLayoutInflater().inflate(R.layout.dlg_evalution,null);
+        TextView content_txt = (TextView) view.findViewById(R.id.content_txt);
+        SpannableString ss = new SpannableString(getString(R.string.fragment_puncture_evaluate_content));
+        ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.orange)), 8, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.orange)), 14, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        content_txt.setText(ss);
+        mEvalutionDialog.setContentView(view);
+    }
     private class TimeRunnable implements Runnable {
 
         @Override

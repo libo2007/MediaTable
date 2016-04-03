@@ -266,6 +266,7 @@
 
                     <Button
                         android:id="@+id/btn6"
+                        android:visibility="gone"
                         style="@style/btn_style"
                         android:text="穿刺评价" />
 
