@@ -23,8 +23,12 @@ import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.cylinder.www.facedetect.FdActivity;
 import com.jiaying.mediatablet.R;
-import com.jiaying.mediatablet.Thread.AniThread;
+import com.jiaying.mediatablet.net.handler.ObserverZXDCSignalRecordAndFilter;
+import com.jiaying.mediatablet.net.handler.ObserverZXDCSignalUIHandler;
+import com.jiaying.mediatablet.net.thread.ObservableZXDCSignalListenerThread;
+import com.jiaying.mediatablet.thread.AniThread;
 import com.jiaying.mediatablet.fragment.AdviceFragment;
 import com.jiaying.mediatablet.fragment.AppointmentFragment;
 import com.jiaying.mediatablet.fragment.CollectionFragment;
@@ -45,13 +49,17 @@ import com.jiaying.mediatablet.fragment.WelcomePlasmFragment;
 import com.jiaying.mediatablet.utils.AppInfoUtils;
 import com.jiaying.mediatablet.widget.VerticalProgressBar;
 
+import java.lang.ref.SoftReference;
+
 
 /**
  * 主界面
  */
 public class MainActivity extends BaseActivity implements View.OnClickListener {
+
     private FragmentManager fragmentManager;
     private AniThread startFist, stopFist;
+    private FdActivity fdActivity;
     private View title_bar_view;//标题栏1
     private View title_bar_back_view;//带返回的标题栏
     private ImageView title_bar_back_img;//返回按钮
@@ -135,6 +143,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         registerReceiver(receiver, filter);
         new Thread(new TimeRunnable()).start();
+
+        ObserverZXDCSignalRecordAndFilter observerZXDCSignalRecordAndFilter = new ObserverZXDCSignalRecordAndFilter(null,null);
+        ObserverZXDCSignalUIHandler observerZXDCSignalUIHandler = new ObserverZXDCSignalUIHandler(new SoftReference<MainActivity>(this));
+        ObservableZXDCSignalListenerThread observableZXDCSignalListenerThread = new ObservableZXDCSignalListenerThread(null,null);
+        // Add the observers into the observable object.
+        observableZXDCSignalListenerThread.addObserver(observerZXDCSignalUIHandler);
+        observableZXDCSignalListenerThread.addObserver(observerZXDCSignalRecordAndFilter);
+        observableZXDCSignalListenerThread.start();
         //*************************************************************************
         startFist = new AniThread(this, ivStartFistHint, "startfist.gif", 150);
         ivStartFistHint.setVisibility(View.VISIBLE);
@@ -161,6 +177,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Test();
     }
 
+    public void setFdActivity(FdActivity fdActivity) {
+        this.fdActivity = fdActivity;
+    }
+
+    public FdActivity getFdActivity(){
+        return this.fdActivity;
+    }
+
     //中间部分的ui初始化
     private void initMain() {
         fragmentManager = getFragmentManager();
@@ -184,6 +208,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+
 
     }
 

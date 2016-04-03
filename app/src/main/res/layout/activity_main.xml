@@ -302,6 +302,16 @@
 
             </FrameLayout>
 
+            <FrameLayout
+                android:id="@+id/fragment_hint_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            </FrameLayout>
+
+
+
             <LinearLayout
                 android:id="@+id/right_view"
                 android:layout_width="100dp"
@@ -454,6 +464,7 @@
             android:layout_gravity="center"
             android:layout_width="312dp"
             android:layout_height="250dp" />
+
 
     </FrameLayout>
 </RelativeLayout>
