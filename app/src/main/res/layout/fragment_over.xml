@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/over_bg"
-    tools:context="com.jiaying.mediatable.fragment.OverServiceEvaluateFragment">
+    tools:context="com.jiaying.mediatablet.fragment.OverServiceEvaluateFragment">
 
     <TextView
         style="@style/txt_white_big_style"

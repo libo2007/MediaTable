@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="com.jiaying.mediatable.fragment.AppointmentFragment">
+    tools:context="com.jiaying.mediatablet.fragment.AppointmentFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,7 +48,7 @@
         </RelativeLayout>
 
 
-        <com.jiaying.mediatable.widget.CalendarView
+        <com.jiaying.mediatablet.widget.CalendarView
             android:id="@+id/calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

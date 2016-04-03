@@ -1,16 +1,15 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/video_frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/video_playing"
-    tools:context="com.jiaying.mediatable.fragment.PlayVideoFragment">
+    android:background="#FF000000"
+    tools:context="com.jiaying.mediatablet.fragment.PlayVideoFragment">
 
-    <TextView
-        android:padding="@dimen/btn_margin"
-        android:layout_marginTop="@dimen/btn_margin_much"
-        android:textStyle="bold"
-        android:visibility="gone"
-        android:text="这里正在播放视频"
-        style="@style/txt_blue_big_style" />
+    <SurfaceView
+        android:id="@+id/video_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
 
 </FrameLayout>

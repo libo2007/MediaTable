@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="com.jiaying.mediatable.fragment.AdviceFragment">
+    tools:context="com.jiaying.mediatablet.fragment.AdviceFragment">
 
     <TextView
         android:layout_margin="@dimen/btn_margin"
