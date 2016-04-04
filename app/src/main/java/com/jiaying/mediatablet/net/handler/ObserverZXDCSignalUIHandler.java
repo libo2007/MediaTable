@@ -5,6 +5,10 @@ import android.util.Log;
 
 
 import com.jiaying.mediatablet.R;
+import com.jiaying.mediatablet.activity.MainActivity;
+import com.jiaying.mediatablet.fragment.HintFragment;
+import com.jiaying.mediatablet.net.signal.RecSignal;
+import com.jiaying.mediatablet.thread.AniThread;
 import com.jiaying.mediatablet.thread.AniThread;
 import com.jiaying.mediatablet.activity.MainActivity;
 import com.jiaying.mediatablet.fragment.HintFragment;
