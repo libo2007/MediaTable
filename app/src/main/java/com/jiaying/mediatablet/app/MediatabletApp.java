@@ -2,6 +2,7 @@ package com.jiaying.mediatablet.app;
 
 import android.app.Application;
 
+import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.jiaying.mediatablet.constants.Constants;
 
@@ -13,7 +14,7 @@ import com.jiaying.mediatablet.constants.Constants;
 public class MediatabletApp extends Application{
     @Override
     public void onCreate() {
-        SpeechUtility.createUtility(MediatabletApp.this, "appid=" + Constants.FLYTEK_APP_ID);
+        SpeechUtility.createUtility(MediatabletApp.this,Constants.FLYTEK_APP_ID);
         super.onCreate();
     }
 }

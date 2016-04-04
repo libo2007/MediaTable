@@ -1,47 +1,42 @@
 package com.jiaying.mediatablet.fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SynthesizerListener;
+import com.iflytek.cloud.util.ResourceUtil;
 import com.jiaying.mediatablet.R;
+import com.jiaying.mediatablet.utils.MyLog;
 
 /*
-fragment父类
+投诉与建议
  */
-public class BaseFragment extends Fragment{
-    private static final String TAG = "BaseFragment";
+public class BaseFragment extends Fragment {
+    private static String TAG = "BaseFragment";
     // 语音合成对象
     private SpeechSynthesizer mTts;
-
+    // 引擎类型
+    private String mEngineType = SpeechConstant.TYPE_LOCAL;
     // 默认发音人
     private String voicer = "xiaoyan";
 
-    private String[] mCloudVoicersEntries;
-    private String[] mCloudVoicersValue ;
-
-    // 缓冲进度
-    private int mPercentForBuffering = 0;
-    // 播放进度
-    private int mPercentForPlaying = 0;
-
-    // 引擎类型
-    private String mEngineType = SpeechConstant.TYPE_CLOUD;
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 初始化合成对象
+        mTts = SpeechSynthesizer.createSynthesizer(getActivity(), mTtsInitListener);
+
     }
 
     @Override
@@ -49,43 +44,37 @@ public class BaseFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        stop();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mTts = SpeechSynthesizer.createSynthesizer(getActivity(), mTtsInitListener);
+    public void play(String text,SynthesizerListener mTtsListener){
         setParam();
-    }
-
-    public void play(String text,SynthesizerListener listener){
-        int code = mTts.startSpeaking(text, listener);
+        int code = mTts.startSpeaking(text, mTtsListener);
+        if(code == ErrorCode.SUCCESS){
+            MyLog.e(TAG,"play 成功");
+        }else{
+            MyLog.e(TAG,"play 失败：" +code);
+        }
     }
 
     public void stop(){
         mTts.stopSpeaking();
+        mTts.destroy();
     }
-
-
     /**
-     * 参数设置
-     * @param
-     * @return
+     * 初始化监听。
      */
+    private InitListener mTtsInitListener = new InitListener() {
+        @Override
+        public void onInit(int code) {
+            MyLog.d(TAG, "InitListener init() code = " + code);
+            if (code != ErrorCode.SUCCESS) {
+//                showTip("初始化失败,错误码："+code);
+                MyLog.e(TAG,"初始化失败,错误码："+code);
+            }else{
+//                setParam();
+            }
+        }
+    };
+
+
     private void setParam(){
         // 清空参数
         mTts.setParameter(SpeechConstant.PARAMS, null);
@@ -97,9 +86,9 @@ public class BaseFragment extends Fragment{
             //设置合成语速
             mTts.setParameter(SpeechConstant.SPEED, "50");
             //设置合成音调
-            mTts.setParameter(SpeechConstant.PITCH,"50");
+            mTts.setParameter(SpeechConstant.PITCH, "50");
             //设置合成音量
-            mTts.setParameter(SpeechConstant.VOLUME,"50");
+            mTts.setParameter(SpeechConstant.VOLUME, "50");
         }else {
             mTts.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_LOCAL);
             // 设置本地合成发音人 voicer为空，默认通过语记界面指定发音人。
@@ -110,7 +99,7 @@ public class BaseFragment extends Fragment{
              */
         }
         //设置播放器音频流类型
-        mTts.setParameter(SpeechConstant.STREAM_TYPE,  "3");
+        mTts.setParameter(SpeechConstant.STREAM_TYPE, "3");
         // 设置播放合成音频打断音乐播放，默认为true
         mTts.setParameter(SpeechConstant.KEY_REQUEST_FOCUS, "true");
 
@@ -119,22 +108,4 @@ public class BaseFragment extends Fragment{
         mTts.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
         mTts.setParameter(SpeechConstant.TTS_AUDIO_PATH, Environment.getExternalStorageDirectory()+"/msc/tts.wav");
     }
-
-    /**
-     * 初始化监听。
-     */
-    private InitListener mTtsInitListener = new InitListener() {
-        @Override
-        public void onInit(int code) {
-            Log.d(TAG, "InitListener init() code = " + code);
-            if (code != ErrorCode.SUCCESS) {
-//                showTip("初始化失败,错误码："+code);
-            } else {
-                // 初始化成功，之后可以调用startSpeaking方法
-                // 注：有的开发者在onCreate方法中创建完合成对象之后马上就调用startSpeaking进行合成，
-                // 正确的做法是将onCreate中的startSpeaking调用移至这里
-            }
-        }
-    };
 }
-

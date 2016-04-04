@@ -1,6 +1,5 @@
-package com.jiaying.mediatablet.Thread;
+package com.jiaying.mediatablet.thread;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;

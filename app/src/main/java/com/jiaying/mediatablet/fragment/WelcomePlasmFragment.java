@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechEvent;
 import com.iflytek.cloud.SynthesizerListener;
 import com.jiaying.mediatablet.R;
 import com.jiaying.mediatablet.graphics.font.AbstractTypeface;
 import com.jiaying.mediatablet.graphics.font.AbstractTypefaceCreator;
 import com.jiaying.mediatablet.graphics.font.XKTypefaceCreator;
+import com.jiaying.mediatablet.utils.MyLog;
 
 /*
 欢迎献浆员
@@ -24,6 +26,7 @@ import com.jiaying.mediatablet.graphics.font.XKTypefaceCreator;
 
 
 public class WelcomePlasmFragment extends BaseFragment {
+    private static final String TAG = "WelcomePlasmFragment";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -137,11 +140,13 @@ public class WelcomePlasmFragment extends BaseFragment {
         @Override
         public void onSpeakBegin() {
 //            showTip("开始播放");
+            MyLog.e(TAG,"开始播放");
         }
 
         @Override
         public void onSpeakPaused() {
 //            showTip("暂停播放");
+
         }
 
         @Override
@@ -156,6 +161,7 @@ public class WelcomePlasmFragment extends BaseFragment {
 //            mPercentForBuffering = percent;
 //            showTip(String.format(getString(R.string.tts_toast_format),
 //                    mPercentForBuffering, mPercentForPlaying));
+            MyLog.e(TAG,"缓存"+ percent);
         }
 
         @Override
@@ -164,14 +170,17 @@ public class WelcomePlasmFragment extends BaseFragment {
 //            mPercentForPlaying = percent;
 //            showTip(String.format(getString(R.string.tts_toast_format),
 //                    mPercentForBuffering, mPercentForPlaying));
+            MyLog.e(TAG,"进度"+ percent);
         }
 
         @Override
         public void onCompleted(SpeechError error) {
             if (error == null) {
+                MyLog.e(TAG,"播放完成"+ error);
 //                showTip("播放完成");
             } else if (error != null) {
 //                showTip(error.getPlainDescription(true));
+                MyLog.e(TAG,"播放完成：" + error.getPlainDescription(true));
             }
         }
 
@@ -179,10 +188,10 @@ public class WelcomePlasmFragment extends BaseFragment {
         public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
             // 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因
             // 若使用本地能力，会话id为null
-            //	if (SpeechEvent.EVENT_SESSION_ID == eventType) {
-            //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
-            //		Log.d(TAG, "session id =" + sid);
-            //	}
+            	if (SpeechEvent.EVENT_SESSION_ID == eventType) {
+            		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
+            		MyLog.d(TAG, "session id =" + sid);
+            	}
         }
     };
 

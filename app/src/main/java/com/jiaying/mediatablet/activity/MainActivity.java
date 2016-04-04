@@ -31,8 +31,13 @@ import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.cylinder.www.facedetect.FdActivity;
+import com.iflytek.cloud.SpeechUtility;
 import com.jiaying.mediatablet.R;
-import com.jiaying.mediatablet.Thread.AniThread;
+import com.jiaying.mediatablet.thread.AniThread;
+import com.jiaying.mediatablet.net.handler.ObserverZXDCSignalRecordAndFilter;
+import com.jiaying.mediatablet.net.handler.ObserverZXDCSignalUIHandler;
+import com.jiaying.mediatablet.net.thread.ObservableZXDCSignalListenerThread;
 import com.jiaying.mediatablet.adapter.VideoAdapter;
 import com.jiaying.mediatablet.constants.Status;
 import com.jiaying.mediatablet.entity.VideoEntity;
@@ -52,6 +57,7 @@ import com.jiaying.mediatablet.fragment.PunctureFragment;
 import com.jiaying.mediatablet.fragment.ServerSettingFragment;
 import com.jiaying.mediatablet.fragment.WaitingPlasmFragment;
 import com.jiaying.mediatablet.fragment.WelcomePlasmFragment;
+import com.jiaying.mediatablet.utils.ApkInstaller;
 import com.jiaying.mediatablet.utils.AppInfoUtils;
 import com.jiaying.mediatablet.utils.MyLog;
 import com.jiaying.mediatablet.widget.VerticalProgressBar;
@@ -59,14 +65,18 @@ import com.jiaying.mediatablet.widget.VerticalProgressBar;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.lang.ref.SoftReference;
+
 
 /**
  * 主界面
  */
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
+
     private FragmentManager fragmentManager;
     private AniThread startFist, stopFist;
+    private FdActivity fdActivity;
     private View title_bar_view;//标题栏1
     private View title_bar_back_view;//带返回的标题栏
     private ImageView title_bar_back_img;//返回按钮
@@ -108,6 +118,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int GROUP_CHECK_INDEX_2 = 2;
     private static final int GROUP_CHECK_INDEX_3 = 3;
     private static final int GROUP_CHECK_INDEX_4 = 4;
+    // 语记安装助手类
+    ApkInstaller mInstaller ;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             //判断电量
@@ -168,6 +180,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         registerReceiver(receiver, filter);
         new Thread(new TimeRunnable()).start();
+
+        ObserverZXDCSignalRecordAndFilter observerZXDCSignalRecordAndFilter = new ObserverZXDCSignalRecordAndFilter(null,null);
+        ObserverZXDCSignalUIHandler observerZXDCSignalUIHandler = new ObserverZXDCSignalUIHandler(new SoftReference<MainActivity>(this));
+        ObservableZXDCSignalListenerThread observableZXDCSignalListenerThread = new ObservableZXDCSignalListenerThread(null,null);
+        // Add the observers into the observable object.
+        observableZXDCSignalListenerThread.addObserver(observerZXDCSignalUIHandler);
+        observableZXDCSignalListenerThread.addObserver(observerZXDCSignalRecordAndFilter);
+        observableZXDCSignalListenerThread.start();
         //*************************************************************************
         startFist = new AniThread(this, ivStartFistHint, "startfist.gif", 150);
         ivStartFistHint.setVisibility(View.VISIBLE);
@@ -175,6 +195,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         // *************************************************************************
 //        stopFist = new AniThread(this, ivStopFistHint, "stopfist.gif", 150);
 //        stopFist.startAni();
+        mInstaller = new  ApkInstaller(this);
+        if (!SpeechUtility.getUtility().checkServiceInstalled()) {
+            mInstaller.install();
+        }
     }
 
     @Override
@@ -192,6 +216,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initGroup();
         initMain();
         Test();
+    }
+
+    public void setFdActivity(FdActivity fdActivity) {
+        this.fdActivity = fdActivity;
+    }
+
+    public FdActivity getFdActivity(){
+        return this.fdActivity;
     }
 
     //中间部分的ui初始化
@@ -231,6 +263,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+
 
     }
 
