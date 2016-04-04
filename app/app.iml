@@ -96,6 +96,5 @@
     <orderEntry type="library" exported="" name="javacv" level="project" />
     <orderEntry type="library" exported="" name="Sunflower" level="project" />
     <orderEntry type="library" exported="" name="softfanNet" level="project" />
-    <orderEntry type="module" module-name="openCVLibrary300" exported="" />
   </component>
 </module>
