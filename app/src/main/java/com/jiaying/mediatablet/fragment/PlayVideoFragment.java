@@ -12,6 +12,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -39,7 +40,7 @@ public class PlayVideoFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String play_url;//视频播放路径
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
@@ -53,15 +54,15 @@ public class PlayVideoFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param play_url Parameter 1.视频播放的路径
      * @param param2 Parameter 2.
      * @return A new instance of fragment PlayVideoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PlayVideoFragment newInstance(String param1, String param2) {
+    public static PlayVideoFragment newInstance(String play_url, String param2) {
         PlayVideoFragment fragment = new PlayVideoFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM1, play_url);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -85,7 +86,7 @@ public class PlayVideoFragment extends Fragment {
         Log.e("PlayVideoFragment", "onCreate ");
 
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            play_url = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -139,7 +140,13 @@ public class PlayVideoFragment extends Fragment {
                 mediaPlayer.setDisplay(holder);
                 Log.e("PlayVideoFragment", "surfaceCreated 3");
                 try {
-                    mediaPlayer.setDataSource("/sdcard/donation.mp4");
+
+                    if(TextUtils.isEmpty(play_url)){
+                        mediaPlayer.setDataSource("/sdcard/donation.mp4");
+                    }else{
+                        mediaPlayer.setDataSource(play_url);
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {

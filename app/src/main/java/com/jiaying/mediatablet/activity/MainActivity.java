@@ -65,6 +65,7 @@ import com.jiaying.mediatablet.fragment.WelcomePlasmFragment;
 import com.jiaying.mediatablet.utils.ApkInstaller;
 import com.jiaying.mediatablet.utils.AppInfoUtils;
 import com.jiaying.mediatablet.utils.MyLog;
+import com.jiaying.mediatablet.utils.VideoUtils;
 import com.jiaying.mediatablet.widget.VerticalProgressBar;
 
 import java.util.ArrayList;
@@ -127,7 +128,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int GROUP_CHECK_INDEX_3 = 3;
     private static final int GROUP_CHECK_INDEX_4 = 4;
     // 语记安装助手类
-    ApkInstaller mInstaller ;
+    ApkInstaller mInstaller;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             //判断电量
@@ -166,6 +167,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     };
 
     private static final int WHAT_UPDATE_TIME = 1;
+    private static final int WHAT_UPDATE_VIDEO = 2;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -175,6 +177,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     long sysTime = System.currentTimeMillis();
                     CharSequence sysTimeStr = DateFormat.format("HH:mm:ss", sysTime);
                     time_txt.setText(sysTimeStr); //更新时间
+                    break;
+                case WHAT_UPDATE_VIDEO:
+                    collection_video_adapter.notifyDataSetChanged();
                     break;
             }
         }
@@ -188,10 +193,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         registerReceiver(receiver, filter);
         new Thread(new TimeRunnable()).start();
-
-        ObserverZXDCSignalRecordAndFilter observerZXDCSignalRecordAndFilter = new ObserverZXDCSignalRecordAndFilter(null,null);
+        new Thread(new LocalVideoRunable()).start();
+        ObserverZXDCSignalRecordAndFilter observerZXDCSignalRecordAndFilter = new ObserverZXDCSignalRecordAndFilter(null, null);
         ObserverZXDCSignalUIHandler observerZXDCSignalUIHandler = new ObserverZXDCSignalUIHandler(new SoftReference<MainActivity>(this));
-        ObservableZXDCSignalListenerThread observableZXDCSignalListenerThread = new ObservableZXDCSignalListenerThread(null,null);
+        ObservableZXDCSignalListenerThread observableZXDCSignalListenerThread = new ObservableZXDCSignalListenerThread(null, null);
         // Add the observers into the observable object.
         observableZXDCSignalListenerThread.addObserver(observerZXDCSignalUIHandler);
         observableZXDCSignalListenerThread.addObserver(observerZXDCSignalRecordAndFilter);
@@ -203,10 +208,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         // *************************************************************************
 //        stopFist = new AniThread(this, ivStopFistHint, "stopfist.gif", 150);
 //        stopFist.startAni();
-        mInstaller = new  ApkInstaller(this);
+        mInstaller = new ApkInstaller(this);
         if (!SpeechUtility.getUtility().checkServiceInstalled()) {
             mInstaller.install();
         }
+        //获取本地视频
+
     }
 
     @Override
@@ -230,7 +237,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         this.fdActivity = fdActivity;
     }
 
-    public FdActivity getFdActivity(){
+    public FdActivity getFdActivity() {
         return this.fdActivity;
     }
 
@@ -257,7 +264,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         collection_video_gridview = (GridView) findViewById(R.id.collection_video_gridview);
 
         collection_video_list = new ArrayList<VideoEntity>();
-        collection_video_adapter = new VideoAdapter(this, collection_video_list);
+        collection_video_adapter = new VideoAdapter(this, collection_video_list,new SoftReference<MainActivity>(this));
         collection_video_gridview.setAdapter(collection_video_adapter);
 
         collection_webview = (WebView) findViewById(R.id.collection_webview);
@@ -744,11 +751,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 //点击播放视频
                             }
                         });
-                        for (int i = 0; i < 20; i++) {
-                            VideoEntity videoEntity = new VideoEntity();
-                            videoEntity.setCover_url("http;//www.baidu.com");
-                            collection_video_list.add(videoEntity);
-                        }
+
                         collection_video_adapter.notifyDataSetChanged();
                     } else if (group_check_index == GROUP_CHECK_INDEX_3) {
 
@@ -805,6 +808,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mServiceDialog.show();
         mServiceDialog.setContentView(R.layout.dlg_call_service);
     }
+
     //穿刺评价对话框
     private void showEvalutionDialog() {
         if (mEvalutionDialog == null) {
@@ -814,7 +818,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mEvalutionDialog.setCancelable(true);
         mEvalutionDialog.setCanceledOnTouchOutside(true);
         mEvalutionDialog.show();
-        View view = getLayoutInflater().inflate(R.layout.dlg_evalution,null);
+        View view = getLayoutInflater().inflate(R.layout.dlg_evalution, null);
         TextView content_txt = (TextView) view.findViewById(R.id.content_txt);
         SpannableString ss = new SpannableString(getString(R.string.fragment_puncture_evaluate_content));
         ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.orange)), 8, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -822,6 +826,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         content_txt.setText(ss);
         mEvalutionDialog.setContentView(view);
     }
+
     private class TimeRunnable implements Runnable {
 
         @Override
@@ -835,6 +840,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    private class LocalVideoRunable implements Runnable {
+
+        @Override
+        public void run() {
+            List<VideoEntity> videoList  = VideoUtils.getLocalVideoList(MainActivity.this);
+            if(videoList != null){
+                collection_video_list.addAll(videoList);
             }
         }
     }
