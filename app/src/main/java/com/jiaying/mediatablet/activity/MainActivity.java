@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import com.cylinder.www.facedetect.FdActivity;
 import com.iflytek.cloud.SpeechUtility;
+import com.cylinder.www.facedetect.FdActivity;
 import com.jiaying.mediatablet.R;
 import com.jiaying.mediatablet.thread.AniThread;
 import com.jiaying.mediatablet.net.handler.ObserverZXDCSignalRecordAndFilter;
@@ -41,6 +42,10 @@ import com.jiaying.mediatablet.net.thread.ObservableZXDCSignalListenerThread;
 import com.jiaying.mediatablet.adapter.VideoAdapter;
 import com.jiaying.mediatablet.constants.Status;
 import com.jiaying.mediatablet.entity.VideoEntity;
+import com.jiaying.mediatablet.net.handler.ObserverZXDCSignalRecordAndFilter;
+import com.jiaying.mediatablet.net.handler.ObserverZXDCSignalUIHandler;
+import com.jiaying.mediatablet.net.thread.ObservableZXDCSignalListenerThread;
+import com.jiaying.mediatablet.thread.AniThread;
 import com.jiaying.mediatablet.fragment.AdviceFragment;
 import com.jiaying.mediatablet.fragment.AppointmentFragment;
 import com.jiaying.mediatablet.fragment.CollectionFragment;
@@ -67,12 +72,15 @@ import java.util.List;
 
 import java.lang.ref.SoftReference;
 
+import java.lang.ref.SoftReference;
+
 
 /**
  * 主界面
  */
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
+
 
     private FragmentManager fragmentManager;
     private AniThread startFist, stopFist;

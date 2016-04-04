@@ -366,12 +366,10 @@
             </FrameLayout>
 
             <FrameLayout
-
                 android:id="@+id/fragment_hint_container"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                >
+                android:layout_weight="1">
 
             </FrameLayout>
 
@@ -532,6 +530,7 @@
             android:layout_width="312dp"
             android:layout_height="250dp"
             android:layout_gravity="center" />
+
 
 
     </FrameLayout>
